@@ -193,99 +193,49 @@ def get_page(criteria_string,query, count=1):
     return pages
 def get_info_on_page_2(pages):
     result = []
-
+    
     for page_html in pages:
-        soup = BeautifulSoup(page_html, "html.parser")
-        articles = soup.find_all("div", class_="feed-grid__item")
+        driver.get("data:text/html;charset=utf-8,{page_html}".format(page_html=page_html))
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'div.feed-grid__item')))
+
+        articles = driver.find_elements(By.XPATH, "//div[@class='feed-grid__item']")
 
         for article in articles:
-            price = article.find("div", class_="title-content").text.strip()
-            size = article.find("div", class_="new-item-box__description").text.strip()
-            brand_element = article.find("p", attrs={"data-testid": "description-subtitle"})
-            brand = brand_element.text.strip() if brand_element else "Marque non spécifiée"
-            a_tag = article.find("a", class_="new-item-box__overlay")
-            image_link = a_tag['href'].strip() if a_tag else None
-            result.append({f"{Spy.rouge}Prix{Spy.blanc}": price, f"{Spy.rouge}Taille": size, f"{Spy.blanc}Marque": brand, f"{Spy.rouge}Photo": image_link})
-
+            price = article.find_element(By.XPATH, ".//div[@class='title-content']").text.strip()
+            size = article.find_element(By.XPATH, ".//div[@class='new-item-box__description']").text.strip()
+            brand = article.find_element(By.XPATH, ".//p[contains(@data-testid, 'description-subtitle')]").text.strip()
+            image_element = article.find_element(By.XPATH, ".//div[@class='new-item-box__image']//img")
+            image_url = image_element.get_attribute("src")
+            try:
+                article_link = article.find_element(By.XPATH, ".//a[@class='new-item-box__overlay']").get_attribute("href").text.strip()
+            except NoSuchElementException:
+                article_link = None
+            result.append({f"{Spy.rouge}Prix{Spy.blanc}": price, f"{Spy.rouge}Taille": size, f"{Spy.blanc}Marque": brand, f"{Spy.rouge}Photo": image_url,  "Lien de l'article": article_link})
+    
     df = pd.DataFrame(result)
     return df
 
 
 
-def get_photo(url, destination_file = 0):
-    time.sleep(4 + random.uniform(0,5))
-    response = requests.get(url, headers= user_agent)
-    html = response.text
-    soup = BeautifulSoup(html, "html5lib")
-    if response.status_code == 429:
-        print(f"{Spy.blanc}[{Spy.rouge}ERREUR{Spy.blanc}] - Rate Limit !")
-        time.sleep(60)
-    elif response.status_code == 404:
-        pass
-    elif response.status_code >= 0:
-        #Ouvre un ficher contenant tout le texte de la page.
-        #with open(destination_file, "w") as f :
-            #f.write(html)
-        #print("Fichier enregistré avec succès :", destination_file)
-
-        info = soup.find("main", class_ = "item-information")
-
-        #Obtenir les images d'un poste vinted
-        if info:
-            # Trouver toutes les balises <div> avec la classe "items_photo"
-            photos = info.find_all("div", class_="item-thumbnail")
-            if photos:
-                # Itérer sur les balises <div> trouvées
-                for photo in photos:
-                    img_tag = photo.find("img")
-                    if img_tag:
-                        image_link = img_tag.get("src")
-                        if image_link:
-                            print(f"{Spy.violet} PHOTOS: {Spy.cyan}", image_link)
-                    else:
-                        print("Aucune balise <img> trouvée à l'intérieur de la balise <div> avec la classe 'item-photos'.")
-            else:
-                print("Aucune balise <div> avec la classe 'item-photos' trouvée.")
-        else:
-            print("Balise <main> avec la classe 'item-information' non trouvée.")
-def get_info_2(url):
-    driver.get(url)
-    prix = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'div[data-testid="item-price"] h1')))
-    marque = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//span[@itemprop="name"]')))
-    taille = WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located((By.XPATH, '//div[@class="details-list__item-value" and @itemprop="size"]')))
-    etat = WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located((By.XPATH, '//div[contains(@class, "details-list__item-value") and @itemprop="condition"]')))
-    couleur = WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located((By.XPATH, '//div[contains(@class, "details-list__item-value") and @itemprop="color"]')))
-    localisation = WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located((By.XPATH, '//div[@class="details-list__item" and @data-testid="item-details-location"]/div[@class="details-list__item-value"]')))
-    vues = WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located((By.XPATH, '//div[@class="details-list__item-title"][text()="Nombre de vues"]')))
-    memb_intere = WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located((By.XPATH, '//div[@class="details-list__item-title"][text()="Membres intéressés"]')))
-    print(f"{Spy.blanc} LA DESCRIPTION DU PRODUIT")
-    return pd.DataFrame({
-                        'Prix': prix.text,
-                        'Marque': marque.text,
-                        'Couleurs': couleur.text ,
-                        'Taille':taille.text,
-                        'Etat': etat.text,
-                        'Vues':vues.text,
-                        'Interesses':memb_intere.text,
-                        'Emplacement':localisation.text,
-                        }, index = [0])
-
+def send_notification(title, message):
+    notification.notify(
+        title=title,
+        message=message,
+        app_name='Vinted Notifier',
+        timeout=10
+    )
 
 def main():
     query = interactive_search()
     criteria_string = interactive_version()
-    pages = get_page(criteria_string=criteria_string,query = query, count=20)
+    pages = get_page(criteria_string=criteria_string, query=query, count=1)
     data = get_info_on_page_2(pages)
-    #print(data)
-    # Enregistrer la DataFrame dans un fichier CSV
+    print(data)
+    
     data.to_csv("vinted_data.csv", index=False)
+    
+    notification_title = "Nouveaux articles Vinted"
+    notification_message = "Les nouveaux articles Vinted ont été collectés avec succès !"
+    send_notification(notification_title, notification_message)
+    
 main()
-
-
-
