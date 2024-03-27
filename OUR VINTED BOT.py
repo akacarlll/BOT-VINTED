@@ -1,5 +1,4 @@
 import os
-
 import requests
 from bs4 import BeautifulSoup
 import time
@@ -17,6 +16,9 @@ from selenium.webdriver.support import expected_conditions as EC
 import numpy as np
 import pandas as pd
 import urllib
+import json
+import smtplib
+from email.message import EmailMessage
 
 
 
@@ -34,7 +36,6 @@ options.add_argument("window-size=1200x600")
 #PATH = "C:\\Users\\carlf\\OneDrive\\Bureau\\Technique de programmation\\BOT VINTED\\Chrome_Driver V114.05.5735.16\\chromedriver.exe"
 PATH = "C:\\Users\\carlf\\OneDrive\\Bureau\\Technique de programmation\\BOT VINTED\\chromedriver_win32\\chromedriver.exe"
 service = Service(executable_path=PATH)
-
 driver = webdriver.Chrome(service=service, options = options)
 #global driver
 
@@ -125,7 +126,6 @@ def interactive_search():
     query = input("Which item do you want to research on vinted.fr ? \n")
     return(query)
 def interactive_version():
-    # I - Ask query and criteria
     print(f'\n {Spy.vert}Maintenant quelques critères, vous pouvez en sauter en appuyant directement sur Entrée. {Spy.blanc}\n ')
     order_str = [
         input("Indiquez l'ordre de la recherche ( 1 choix maximum)parmis la liste suivante: \n {} \n".format(dict_order.keys()))]
@@ -150,7 +150,7 @@ def interactive_version():
     min_price = input("Voulez vous un prix minimum ? ")
     max_price = input("Voulez-vous un prix maximum ? ")
 
-    end_page = input('Until which page do you want to collect data? (max = 400)')
+    #end_page = input('Until which page do you want to collect data? (max = 400)')
     if order_str == ['']:
         order_str = []
     if catalog_str == ['']:
@@ -167,75 +167,148 @@ def interactive_version():
     criteria_string = define_criteria_string(order=order_str, catalog=catalog_str, size=size_str, color=color_str, \
                                              brand=brand_str, min_price=min_price, max_price=max_price,
                                            condition=condition_str)
-    return(criteria_string)
+    return criteria_string
 
 #criteria_string = interactive_version()
 
-def get_page(criteria_string,query, count=1):
-
+def get_page(criteria_string, query, count=1):
     pages = []
-    driver = webdriver.Chrome()
     base_url = "https://www.vinted.fr/catalog?search_text="
     query = query.replace(' ', '%20')
-    for page_nb in range(1, count+1):
-        #page_url = f"https://www.logic-immo.com/&page={page_nb}.html"
+    for page_nb in range(1, count + 1):
         page_url = f"{base_url}{query}{criteria_string}&page={page_nb}"
-        #page_url = f"https://www.vinted.fr/catalog?search_text=Pulls%20Noir%20Carhartt%20Vintage&order=newest_first&page={page_nb}"
         driver.get(page_url)
 
         if page_nb == 1:
-            time.sleep(3)
-        else:
-            time.sleep(2)
+            WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'div.feed-grid__item')))
 
         pages.append(driver.page_source.encode("utf-8"))
-    driver.quit()
+
     return pages
+
+
 def get_info_on_page_2(pages):
     result = []
-    
-    for page_html in pages:
-        driver.get("data:text/html;charset=utf-8,{page_html}".format(page_html=page_html))
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'div.feed-grid__item')))
 
-        articles = driver.find_elements(By.XPATH, "//div[@class='feed-grid__item']")
+    for page_html in pages:
+        soup = BeautifulSoup(page_html, "html.parser")
+        articles = soup.find_all("div", class_="feed-grid__item")
 
         for article in articles:
-            price = article.find_element(By.XPATH, ".//div[@class='title-content']").text.strip()
-            size = article.find_element(By.XPATH, ".//div[@class='new-item-box__description']").text.strip()
-            brand = article.find_element(By.XPATH, ".//p[contains(@data-testid, 'description-subtitle')]").text.strip()
-            image_element = article.find_element(By.XPATH, ".//div[@class='new-item-box__image']//img")
-            image_url = image_element.get_attribute("src")
-            try:
-                article_link = article.find_element(By.XPATH, ".//a[@class='new-item-box__overlay']").get_attribute("href").text.strip()
-            except NoSuchElementException:
-                article_link = None
-            result.append({f"{Spy.rouge}Prix{Spy.blanc}": price, f"{Spy.rouge}Taille": size, f"{Spy.blanc}Marque": brand, f"{Spy.rouge}Photo": image_url,  "Lien de l'article": article_link})
-    
+            price = article.find("div", class_="title-content").text.strip()
+            size = article.find("div", class_="new-item-box__description").text.strip()
+            brand_element = article.find("p", attrs={"data-testid": "description-subtitle"})
+            brand = brand_element.text.strip() if brand_element else "Marque non spécifiée"
+            a_tag = article.find("a", class_="new-item-box__overlay")
+            image_link = a_tag['href'].strip() if a_tag else None
+            link_element = article.find('a',
+                                        class_='new-item-box__overlay new-item-box__overlay--clickable new-item-box__overlay--gradient')
+            link_product = link_element['href'] if link_element else None  # Handle cases where link is absent
+            result.append(
+                {f"Prix": price, f"Taille": size, f"Marque": brand,
+                 f"Photo": image_link, f"Lien": link_product})
+
     df = pd.DataFrame(result)
     return df
 
 
+def get_photo(url, destination_file = 0):
+    time.sleep(4 + random.uniform(0,5))
+    response = requests.get(url, headers= user_agent)
+    html = response.text
+    soup = BeautifulSoup(html, "html5lib")
+    if response.status_code == 429:
+        print(f"{Spy.blanc}[{Spy.rouge}ERREUR{Spy.blanc}] - Rate Limit !")
+        time.sleep(60)
+    elif response.status_code == 404:
+        pass
+    elif response.status_code >= 0:
+        #Ouvre un ficher contenant tout le texte de la page.
+        #with open(destination_file, "w") as f :
+            #f.write(html)
+        #print("Fichier enregistré avec succès :", destination_file)
 
-def send_notification(title, message):
-    notification.notify(
-        title=title,
-        message=message,
-        app_name='Vinted Notifier',
-        timeout=10
-    )
+        info = soup.find("main", class_ = "item-information")
+
+        #Obtenir les images d'un poste vinted
+        if info:
+            # Trouver toutes les balises <div> avec la classe "items_photo"
+            photos = info.find_all("div", class_="item-thumbnail")
+            if photos:
+                # Itérer sur les balises <div> trouvées
+                for photo in photos:
+                    img_tag = photo.find("img")
+                    if img_tag:
+                        image_link = img_tag.get("src")
+                        if image_link:
+                            print(f"{Spy.violet} PHOTOS: {Spy.cyan}", image_link)
+                    else:
+                        print("Aucune balise <img> trouvée à l'intérieur de la balise <div> avec la classe 'item-photos'.")
+            else:
+                print("Aucune balise <div> avec la classe 'item-photos' trouvée.")
+        else:
+            print("Balise <main> avec la classe 'item-information' non trouvée.")
+def get_info_2(url):
+    driver.get(url)
+    prix = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'div[data-testid="item-price"] h1')))
+    marque = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//span[@itemprop="name"]')))
+    taille = WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located((By.XPATH, '//div[@class="details-list__item-value" and @itemprop="size"]')))
+    etat = WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located((By.XPATH, '//div[contains(@class, "details-list__item-value") and @itemprop="condition"]')))
+    couleur = WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located((By.XPATH, '//div[contains(@class, "details-list__item-value") and @itemprop="color"]')))
+    localisation = WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located((By.XPATH, '//div[@class="details-list__item" and @data-testid="item-details-location"]/div[@class="details-list__item-value"]')))
+    vues = WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located((By.XPATH, '//div[@class="details-list__item-title"][text()="Nombre de vues"]')))
+    memb_intere = WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located((By.XPATH, '//div[@class="details-list__item-title"][text()="Membres intéressés"]')))
+    print(f"{Spy.blanc} LA DESCRIPTION DU PRODUIT")
+    df = pd.DataFrame({
+                        'Prix': prix.text,
+                        'Marque': marque.text,
+                        'Couleurs': couleur.text ,
+                        'Taille':taille.text,
+                        'Etat': etat.text,
+                        'Vues':vues.text,
+                        'Interesses':memb_intere.text,
+                        'Emplacement':localisation.text,
+                        }, index = [0])
+    print(df)
+
 
 def main():
     query = interactive_search()
-    criteria_string = interactive_version()
-    pages = get_page(criteria_string=criteria_string, query=query, count=1)
+    #criteria_string = interactive_version()
+    criteria_string = define_criteria_string(order=["relevance"],catalog =["men"], )
+    pages = get_page(criteria_string=criteria_string,query = query, count=1)
     data = get_info_on_page_2(pages)
     print(data)
-    
+    # Enregistrer la DataFrame dans un fichier CSV
     data.to_csv("vinted_data.csv", index=False)
-    
-    notification_title = "Nouveaux articles Vinted"
-    notification_message = "Les nouveaux articles Vinted ont été collectés avec succès !"
-    send_notification(notification_title, notification_message)
-    
 main()
+
+
+"""driver.get("https://www.vinted.fr/catalog?search_text=Pull%20carhartt%20noir%20vintage&order=newest_first")
+
+# Attendre que la page soit entièrement chargée (vous pouvez ajuster le temps d'attente si nécessaire)
+driver.implicitly_wait(10)
+
+# Trouver tous les éléments contenant les prix des articles
+articles = driver.find_elements(By.XPATH, "//div[@class='feed-grid__item']")
+
+# Parcourir les éléments et afficher les prix
+for article in articles:
+    price = article.find_element(By.XPATH, ".//div[@class='title-content']").text.strip()
+    size = article.find_element(By.XPATH, ".//div[@class='new-item-box__description']").text.strip()
+    brand = article.find_element(By.XPATH, ".//p[contains(@data-testid, 'description-subtitle')]").text.strip()
+    image_element = article.find_element(By.XPATH, ".//div[@class='new-item-box__image']//img")
+    image_url = image_element.get_attribute("src")
+    print("Prix:", price, "| Taille:", size, "| Marque:", brand, "| Photo:", image_url)
+
+# Fermer le navigateur
+driver.quit()"""
+
+
+
