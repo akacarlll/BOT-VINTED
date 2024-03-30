@@ -56,4 +56,5 @@ def main():
         time.sleep(TEMPS_ACTUALISATION) 
 
 if __name__ == "__main__":
+    print("main")
     main()
