@@ -1,39 +1,100 @@
-import pandas as pd
-from bs4 import BeautifulSoup
-import time
-import random
 import requests
 from bs4 import BeautifulSoup
+import time, random
+user_agent = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'}
+import pandas as pd
+import selenium
+from urllib.error import URLError, HTTPError
 
 
-# Fonction pour extraire les informations d'une page Vinted à partir du lien
-def scrapper_vinted(lien):
-    response = requests.get(lien)
-    if response.status_code == 200:
-        soup = BeautifulSoup(response.text, 'html.parser')
+def get_page(urlpage):
+    # Avoid getting ban
+    time.sleep(2 + random.uniform(0, 3))
+    try:
+         # Get the html from the webpage
+        res = requests.get(urlpage, headers=user_agent)
+        # Parse the html
+        soup = BeautifulSoup(res.text, 'html.parser')
 
-        # Exemple : Extraire le nom de l'article
-        nom_article = soup.find('h1', class_='title-1111').text.strip()
+        try:
+            prix = soup.find('h1', class_='web_ui__Text__text web_ui__Text__heading web_ui__Text__left').text.strip()
+        except (AttributeError, TypeError, TimeoutError, ValueError):
+            prix = "NaN"
 
-        # Exemple : Extraire le prix de l'article
-        prix_article = soup.find('span', class_='text-bold').text.strip()
+        try:
+            marque = soup.find('span', itemprop='name').text
+        except (AttributeError, TypeError, TimeoutError, ValueError):
+            marque = "NaN"
 
-        # Exemple : Afficher le nom et le prix de l'article
-        print("Nom de l'article:", nom_article)
-        print("Prix de l'article:", prix_article)
-    else:
-        print("Erreur lors de la requête à", lien)
+        try:
+            taille = soup.find('div', class_='details-list__item-value', itemprop='size').text.strip()
+        except (AttributeError, TypeError, TimeoutError, ValueError):
+            taille = "NaN"
 
+        try:
+            etat = soup.find('div', class_='details-list__item-value', itemprop='condition').text.strip()
+        except (AttributeError, TypeError, TimeoutError, ValueError):
+            etat = "NaN"
 
-# Fonction pour itérer sur toutes les lignes de la base de données et appeler le scraper
-def scraper_base_de_donnees(dataframe):
-    for lien in dataframe['Lien']:
-        scrapper_vinted(lien)
+        try:
+            couleur = soup.find('div', class_='details-list__item-value', itemprop='color').text.strip()
+        except (AttributeError, TypeError, TimeoutError, ValueError):
+            couleur = "NaN"
 
+        try:
+            localisation = soup.find('div', class_='details-list__item',
+                                     attrs={"data-testid": "item-details-location"}).text.strip()
+        except (AttributeError, TypeError, TimeoutError, ValueError):
+            localisation = "NaN"
 
-# Charger votre base de données avec pandas
-# Remplacez 'votre_fichier.csv' par le chemin de votre fichier CSV contenant la colonne "Lien"
-dataframe = pd.read_csv("C:\\Users\\carlf\\OneDrive\\Bureau\\Technique de programmation\\BOT VINTED\\vinted_data.csv")
+        try:
+            vues = soup.find('div', class_='details-list__item',
+                             attrs={"data-testid": "item-details-view_count"}).text.strip()
+        except (AttributeError, TypeError, TimeoutError, ValueError):
+            vues = "NaN"
 
-# Appel de la fonction pour scraper la base de données
-scraper_base_de_donnees(dataframe)
+        try:
+            date_ajout = soup.find('div', class_='details-list__item',
+                                   attrs={"data-testid": "item-details-uploaded_date"}).text.strip()
+        except (AttributeError, TypeError, TimeoutError, ValueError):
+            date_ajout = "NaN"
+
+        return {
+            "Prix": prix,
+            "Marque": marque,
+            "Taille": taille,
+            "État": etat,
+            "Couleur": couleur,
+            "Localisation": localisation,
+            "Vues": vues,
+            "Date d'ajout": date_ajout
+        }
+    except (ConnectionError, TimeoutError, PermissionError, URLError, HTTPError):
+        return {
+            "Prix": "NaN",
+            "Marque": "NaN",
+            "Taille": "NaN",
+            "État": "NaN",
+            "Couleur": "NaN",
+            "Localisation": "NaN",
+            "Vues": "NaN",
+            "Date d'ajout": "NaN"
+        }
+
+def scrape_data(df):
+    data_list = []
+    for urlpage in df["Lien"]:
+        data = get_page(urlpage)
+        data_list.append(data)
+    return(pd.DataFrame(data_list))
+
+df = pd.read_csv("C:\\Users\\carlf\\OneDrive\\Bureau\\Technique de programmation\\BOT VINTED\\vinted_data.csv")
+df_3 = df.head(3)
+# Convertir la liste de dictionnaires en une DataFrame pandas
+final_df = scrape_data(df)
+
+# Afficher ou sauvegarder la DataFrame
+print(final_df)
+# final_df.to_csv("output.csv", index=False)
+# Enregistrer la DataFrame dans un fichier CSV dans le même dossier que le fichier original
+final_df.to_csv("C:\\Users\\carlf\\OneDrive\\Bureau\\Technique de programmation\\BOT VINTED\\final_data.csv", index=False)
