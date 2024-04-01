@@ -10,12 +10,14 @@ from urllib.error import URLError, HTTPError
 def get_page(urlpage):
     # Avoid getting ban
     time.sleep(2 + random.uniform(0, 3))
+    #The post might be deleted when we want to access it, doing this allow the bot to keep working even if the link brings to nowhere
     try:
          # Get the html from the webpage
         res = requests.get(urlpage, headers=user_agent)
         # Parse the html
         soup = BeautifulSoup(res.text, 'html.parser')
-
+        
+        #Try to get the price, except a bunch of error (we're never too cautious)
         try:
             prix = soup.find('h1', class_='web_ui__Text__text web_ui__Text__heading web_ui__Text__left').text.strip()
         except (AttributeError, TypeError, TimeoutError, ValueError):
@@ -80,7 +82,7 @@ def get_page(urlpage):
             "Vues": "NaN",
             "Date d'ajout": "NaN"
         }
-
+#This fonction just takes all the IRL we scrapped before and return a Pandas Dataframe containing bunch of information
 def scrape_data(df):
     data_list = []
     for urlpage in df["Lien"]:
@@ -90,11 +92,11 @@ def scrape_data(df):
 
 df = pd.read_csv("C:\\Users\\carlf\\OneDrive\\Bureau\\Technique de programmation\\BOT VINTED\\vinted_data.csv")
 df_3 = df.head(3)
-# Convertir la liste de dictionnaires en une DataFrame pandas
+
+#Call The function
 final_df = scrape_data(df)
 
-# Afficher ou sauvegarder la DataFrame
 print(final_df)
-# final_df.to_csv("output.csv", index=False)
+
 # Enregistrer la DataFrame dans un fichier CSV dans le même dossier que le fichier original
 final_df.to_csv("C:\\Users\\carlf\\OneDrive\\Bureau\\Technique de programmation\\BOT VINTED\\final_data.csv", index=False)
