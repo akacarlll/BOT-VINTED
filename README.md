@@ -32,7 +32,7 @@ Définissez les variables RECHERCHE, MAX_PRIX, MAX_SIZE_ELEMENT, TO_EMAIL et SEN
 Assurez-vous que la variable URL est correctement configurée pour la recherche sur Vinted.
 
 ## Utilisation :
-Exécutez le script Python en utilisant la commande python nom_du_script.py.
+Exécutez le script Python en utilisant la commande python easy_vinted_bot.py.
 Le script commencera à surveiller les nouvelles annonces sur Vinted.
 Lorsqu'une nouvelle annonce correspondant aux critères est trouvée, une notification par e-mail sera envoyée à l'adresse spécifiée.
 
