@@ -7,7 +7,7 @@ Ce projet vise à simplifier les recherches fastidieuses sur Vinted en automatis
 
 
 </div>
-*Nota bene : Nous avons créé deux bots distincts. Le premier se trouve dans la branche principale ("main"), tandis que le second se trouve dans la branche "feature". Cette organisation nous a permis d'utiliser les packages différemment et d'en utiliser d'autres également.*
+Nota bene : Nous avons créé deux bots distincts. Le premier se trouve dans la branche principale ("main"), tandis que le second se trouve dans la branche "feature". Cette organisation nous a permis d'utiliser les packages différemment et d'en utiliser d'autres également.
 
 ## Fonctionnement:
 Définissez vos préférences : Précisez le nom, la marque, la taille, la couleur et d'autres caractéristiques de l'article recherché. Vous avez également la possibilité de définir le nombre de pages Vinted à explorer.
