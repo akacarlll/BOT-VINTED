@@ -18,12 +18,11 @@ Intégration avec SendGrid : Les notifications par e-mail sont envoyées via l'A
 ## Prérequis :
 Avant d'exécuter le script, assurez-vous d'avoir les éléments suivants installés :
 
-Python (version 3.x)
-Selenium (pip install selenium)
-SendGrid (pip install sendgrid)
-Navigateur Web compatible avec Selenium (par exemple, Google Chrome)
-Navigateur Web compatible avec Selenium (par exemple, Google Chrome)
-Webdriver Chrome (Téléchargeable depuis https://chromedriver.chromium.org/downloads et doit être placé dans le PATH ou dans le même répertoire que le script)
+Python (version 3.x)  
+Selenium (pip install selenium)  
+SendGrid (pip install sendgrid)  
+Navigateur Web compatible avec Selenium (par exemple, Google Chrome)   
+Webdriver Chrome (Téléchargeable depuis https://chromedriver.chromium.org/downloads et doit être placé dans le PATH ou dans le même répertoire que le script)  
 
 ## Configuration :
 Avant de lancer le script, vous devez effectuer les configurations suivantes dans le fichier Python :
@@ -32,12 +31,12 @@ Définissez les variables RECHERCHE, MAX_PRIX, MAX_SIZE_ELEMENT, TO_EMAIL et SEN
 Assurez-vous que la variable URL est correctement configurée pour la recherche sur Vinted.
 
 ## Utilisation :
-Exécutez le script Python en utilisant la commande python easy_vinted_bot.py.
-Le script commencera à surveiller les nouvelles annonces sur Vinted.
-Lorsqu'une nouvelle annonce correspondant aux critères est trouvée, une notification par e-mail sera envoyée à l'adresse spécifiée.
+Exécutez le script Python en utilisant la commande python easy_vinted_bot.py.  
+Le script commencera à surveiller les nouvelles annonces sur Vinted.  
+Lorsqu'une nouvelle annonce correspondant aux critères est trouvée, une notification par e-mail sera envoyée à l'adresse spécifiée.  
 
 ## Améliorations Possibles :
-Ajouter la prise en charge d'autres méthodes de notification, telles que les notifications push sur mobile.
-Permettre une configuration plus avancée des critères de recherche, par exemple en ajoutant des filtres supplémentaires.
-Implémenter une interface utilisateur pour faciliter la configuration et la surveillance des annonces.
+Ajouter la prise en charge d'autres méthodes de notification, telles que les notifications push sur mobile.  
+Permettre une configuration plus avancée des critères de recherche, par exemple en ajoutant des filtres supplémentaires.  
+Implémenter une interface utilisateur pour faciliter la configuration et la surveillance des annonces.  
 Assurez-vous de bien comprendre le code et les configurations avant de l'exécuter. Si vous avez des questions ou des suggestions d'amélioration, n'hésitez pas à les mentionner dans les commentaires du script ou à les ajouter à ce README.
