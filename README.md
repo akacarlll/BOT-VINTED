@@ -1,43 +1,48 @@
-# BOT-VINTED
+Outil de recherche automatique d'articles Vinted
+Objectif:
+Ce projet vise à simplifier les recherches fastidieuses sur Vinted en automatisant la quête d'articles correspondant à vos critères spécifiques. Il vous envoie ensuite les informations pertinentes par email.
 
-<div align="center">
-  
-### ℹ️ Information
+Fonctionnement:
+Définissez vos préférences : Précisez le nom, la marque, la taille, la couleur et d'autres caractéristiques de l'article recherché. Vous avez également la possibilité de définir le nombre de pages Vinted à explorer.
 
-Ce _readme_ se concentre sur le fonctionnement et l'utilisation du bot "easy_vinted_bot.py" car il nous a paru plus logique de détailler la démarche à suivre concernant notre bot qui fonctionnait le mieux des deux réalisés.
+Lancez le bot : Une fois vos préférences configurées, le bot se charge de parcourir les pages de Vinted et d'extraire les liens de tous les articles correspondant à vos critères.
 
-</div>
+Collectez les informations : L'outil récupère ensuite toutes les informations utiles de chaque article, telles que le prix, la description, les photos, et les stocke pour une consultation ultérieure.
 
-## Fonctionnalités principales :
-Ce script Python utilise Selenium pour surveiller les nouvelles annonces sur Vinted répondant à certains critères et envoie des notifications par e-mail lorsque de telles annonces sont trouvées.
-Surveillance Automatisée : Le bot scrute périodiquement les nouvelles annonces sur Vinted en fonction des critères définis.
-Notification par E-mail : Lorsqu'une nouvelle annonce est détectée, le bot envoie une notification par e-mail avec des détails sur l'annonce.
-Critères de Recherche Personnalisables : Les critères de recherche tels que le produit recherché, le prix maximum et la taille sont facilement ajustables.
-Intégration avec SendGrid : Les notifications par e-mail sont envoyées via l'API SendGrid.
+Restez informé : Vous recevez un récapitulatif par email contenant les informations des derniers produits ajoutés, avec un lien vers chaque article pour une consultation facile.
 
-## Prérequis :
-Avant d'exécuter le script, assurez-vous d'avoir les éléments suivants installés :
+Structure du code:
+Le code est divisé en 5 modules distincts pour une meilleure organisation et une maintenance aisée:
 
-Python (version 3.x)
-Selenium (pip install selenium)
-SendGrid (pip install sendgrid)
-Navigateur Web compatible avec Selenium (par exemple, Google Chrome)
-Navigateur Web compatible avec Selenium (par exemple, Google Chrome)
-Webdriver Chrome (Téléchargeable depuis https://chromedriver.chromium.org/downloads et doit être placé dans le PATH ou dans le même répertoire que le script)
+Get_Link : Cette partie définit les caractéristiques de l'article recherché, explore un nombre défini de pages Vinted, extrait les liens de tous les articles présents et les stocke dans une base de données CSV.
 
-## Configuration :
-Avant de lancer le script, vous devez effectuer les configurations suivantes dans le fichier Python :
+Final_db : Elle itère sur chaque lien de la base de données CSV, collecte toutes les informations du produit grâce à BeautifulSoup et enrichit la base de données avec ces informations.
 
-Définissez les variables RECHERCHE, MAX_PRIX, MAX_SIZE_ELEMENT, TO_EMAIL et SENDER_MAIL selon vos préférences.
-Assurez-vous que la variable URL est correctement configurée pour la recherche sur Vinted.
+Get_Last : Trie les articles par date de publication et ne conserve que les X derniers articles définis par l'utilisateur.
 
-## Utilisation :
-Exécutez le script Python en utilisant la commande python easy_vinted_bot.py.
-Le script commencera à surveiller les nouvelles annonces sur Vinted.
-Lorsqu'une nouvelle annonce correspondant aux critères est trouvée, une notification par e-mail sera envoyée à l'adresse spécifiée.
+Send_Mail : Envoie un email au propriétaire du bot avec les informations des X derniers produits ajoutés, incluant un lien vers chaque article.
 
-## Améliorations Possibles :
-Ajouter la prise en charge d'autres méthodes de notification, telles que les notifications push sur mobile.
-Permettre une configuration plus avancée des critères de recherche, par exemple en ajoutant des filtres supplémentaires.
-Implémenter une interface utilisateur pour faciliter la configuration et la surveillance des annonces.
-Assurez-vous de bien comprendre le code et les configurations avant de l'exécuter. Si vous avez des questions ou des suggestions d'amélioration, n'hésitez pas à les mentionner dans les commentaires du script ou à les ajouter à ce README.
+Test : Cette partie permet d'exécuter automatiquement et en continu le bot en concaténant toutes les fonctions dans une boucle while.
+
+Prérequis:
+Python 3
+Modules Selenium et BeautifulSoup
+Un compte Vinted
+Utilisation:
+Installez les modules Selenium et BeautifulSoup.
+Modifiez les paramètres de recherche dans la fonction Get_Link.
+Lancez le script Python.
+Remarques:
+Le nombre de pages à scraper est limité par Vinted.
+Veuillez respecter les conditions d'utilisation de Vinted.
+Licence:
+Ce projet est distribué sous licence MIT.
+
+Contact:
+N'hésitez pas à me contacter si vous avez des questions ou des suggestions.
+
+
+
+
+
+
