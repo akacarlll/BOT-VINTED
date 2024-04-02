@@ -1,16 +1,15 @@
 # BOT-VINTED
 
-<details>
-<summary><strong>ℹ️ Important</strong></summary>
+<div align="center">
+  
+### ℹ️ Information
 
-Ce script Python utilise Selenium pour surveiller les nouvelles annonces sur Vinted répondant à certains critères et envoie des notifications par e-mail lorsque de telles annonces sont trouvées.
+Ce _readme_ se concentre sur le fonctionnement et l'utilisation du bot "easy_vinted_bot.py" car il nous a paru plus logique de détailler la démarche à suivre concernant notre bot qui fonctionnait le mieux des deux réalisés.
 
-</details>
-
-
-Ce script Python utilise Selenium pour surveiller les nouvelles annonces sur Vinted répondant à certains critères et envoie des notifications par e-mail lorsque de telles annonces sont trouvées.
+</div>
 
 ## Fonctionnalités principales :
+Ce script Python utilise Selenium pour surveiller les nouvelles annonces sur Vinted répondant à certains critères et envoie des notifications par e-mail lorsque de telles annonces sont trouvées.
 Surveillance Automatisée : Le bot scrute périodiquement les nouvelles annonces sur Vinted en fonction des critères définis.
 Notification par E-mail : Lorsqu'une nouvelle annonce est détectée, le bot envoie une notification par e-mail avec des détails sur l'annonce.
 Critères de Recherche Personnalisables : Les critères de recherche tels que le produit recherché, le prix maximum et la taille sont facilement ajustables.
