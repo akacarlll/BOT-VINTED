@@ -1,5 +1,5 @@
 # BOT-VINTED
-> [!info] Ce _readme_ a été rédigé pour le bot "easy_vinted_bot" étant donné qu'il nous a paru plus cohérent d'expliquer le fonctionement du plus fonctionnel des deux bots que nous avons réalisés.
+> **Note :** Ce _readme_ a été rédigé pour le bot "easy_vinted_bot" étant donné qu'il nous a paru plus cohérent d'expliquer le fonctionement du plus fonctionnel des deux bots que nous avons réalisés.
 
 Ce script Python utilise Selenium pour surveiller les nouvelles annonces sur Vinted répondant à certains critères et envoie des notifications par e-mail lorsque de telles annonces sont trouvées.
 
@@ -17,7 +17,7 @@ Selenium (pip install selenium)
 SendGrid (pip install sendgrid)
 Navigateur Web compatible avec Selenium (par exemple, Google Chrome)
 Navigateur Web compatible avec Selenium (par exemple, Google Chrome)
-Webdriver Chrome (Téléchargeable depuis https://sites.google.com/a/chromium.org/chromedriver/downloads et doit être placé dans le PATH ou dans le même répertoire que le script)
+Webdriver Chrome (Téléchargeable depuis https://chromedriver.chromium.org/downloads et doit être placé dans le PATH ou dans le même répertoire que le script)
 
 ## Configuration :
 Avant de lancer le script, vous devez effectuer les configurations suivantes dans le fichier Python :
