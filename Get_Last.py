@@ -17,5 +17,13 @@ def get_dernier(df):
 
     return df_sorted(3)
 
+def lastlast():
+    df = pd.read_csv("C:\\Users\\carlf\\OneDrive\\Bureau\\Technique de programmation\\BOT VINTED\\final_data.csv")
+    dernier_items = get_dernier(df)
+    print(dernier_items)
+
+# Appeler la fonction main si ce script est exécuté en tant que programme principal
+if __name__ == "__lastlast__":
+    lastlast()
 
 
