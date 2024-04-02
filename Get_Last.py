@@ -23,7 +23,7 @@ def lastlast():
     print(dernier_items)
 
 # Appeler la fonction main si ce script est exécuté en tant que programme principal
-if __name__ == "__lastlast__":
+if __name__ == "__main__":
     lastlast()
 
 
