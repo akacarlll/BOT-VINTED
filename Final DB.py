@@ -1,18 +1,18 @@
 import requests
 from bs4 import BeautifulSoup
 import time, random
-user_agent = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'}
 import pandas as pd
 import selenium
 from urllib.error import URLError, HTTPError
 
+user_agent = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'}
 
 def get_page(urlpage):
     # Avoid getting ban
     time.sleep(2 + random.uniform(0, 3))
     #The post might be deleted when we want to access it, doing this allow the bot to keep working even if the link brings to nowhere
     try:
-         # Get the html from the webpage
+        # Get the html from the webpage
         res = requests.get(urlpage, headers=user_agent)
         # Parse the html
         soup = BeautifulSoup(res.text, 'html.parser')
@@ -88,15 +88,22 @@ def scrape_data(df):
     for urlpage in df["Lien"]:
         data = get_page(urlpage)
         data_list.append(data)
-    return(pd.DataFrame(data_list))
+    dataaa = pd.DataFrame(data_list)
+    return dataaa
 
-df = pd.read_csv("C:\\Users\\carlf\\OneDrive\\Bureau\\Technique de programmation\\BOT VINTED\\vinted_data.csv")
-df_3 = df.head(3)
+def final_df():
+    # Votre code principal ici
+    # Par exemple, charger le dataframe df à partir d'un fichier ou d'une autre source de données
+    df = pd.read_csv("C:\\Users\\carlf\\OneDrive\\Bureau\\Technique de programmation\\BOT VINTED\\vinted_data.csv")  # Remplacez "votre_fichier.csv" par le chemin de votre fichier CSV
 
-#Call The function
-final_df = scrape_data(df)
+    # Appeler la fonction scrape_data
+    resultats = scrape_data(df)
+    # Enregistrer la DataFrame dans un fichier CSV dans le même dossier que le fichier original
+    resultats.to_csv("C:\\Users\\carlf\\OneDrive\\Bureau\\Technique de programmation\\BOT VINTED\\final_data.csv",
+                    index=False)
+    # Afficher les résultats ou les enregistrer dans un fichier, etc.
+    print(resultats)
 
-print(final_df)
-
-# Enregistrer la DataFrame dans un fichier CSV dans le même dossier que le fichier original
-final_df.to_csv("C:\\Users\\carlf\\OneDrive\\Bureau\\Technique de programmation\\BOT VINTED\\final_data.csv", index=False)
+# Appeler la fonction main si ce script est exécuté en tant que programme principal
+if __name__ == "__main__":
+    final_df()
