@@ -2,7 +2,10 @@
 <div align="center">
   
 ### Objectifs:
-Ce projet vise à simplifier les recherches fastidieuses sur Vinted en automatisant la quête d'articles correspondant à vos critères spécifiques. Il vous envoie ensuite les informations pertinentes par email.
+Ce projet vise à simplifier les recherches fastidieuses sur Vinted en automatisant la quête d'articles correspondant à vos critères spécifiques. Il vous envoie ensuite les informations pertinentes par email.  
+
+
+Nota Bene : Nous avons créée deux Bots distincts le premier se trouve dans la branche main, quant au second il est dans l'autre branche. Cela nous a permis d'utiliser différemment les packages, et d'en utiliser d'autres aussi.
 
 </div>
 
