@@ -1,44 +1,37 @@
 # BOT-VINTED
-Ce projet consiste en un bot Python conçu pour surveiller les nouveaux articles sur le site Vinted et notifier l'utilisateur lorsque des articles répondant à certains critères sont trouvés. Le bot utilise l'automatisation du navigateur avec Selenium pour naviguer sur le site, extraire les informations sur les articles et envoyer des notifications par e-mail à l'utilisateur.
+> [!info] Ce _readme_ a été rédigé pour le bot "easy_vinted_bot" étant donné qu'il nous a paru plus cohérent d'expliquer le fonctionement du plus fonctionnel des deux bots que nous avons réalisés.
 
-## Fonctionnalités
-Recherche automatique de nouveaux articles sur Vinted en fonction de critères définis (par exemple, marque, prix, taille, etc.).
-Notification par e-mail lorsqu'un nouvel article correspondant aux critères est trouvé.
-Possibilité de définir des critères de recherche personnalisés, tels que la marque, la taille, le prix, etc.
-Utilisation de l'automatisation du navigateur avec Selenium pour simuler le comportement de l'utilisateur sur le site Vinted.
+Ce script Python utilise Selenium pour surveiller les nouvelles annonces sur Vinted répondant à certains critères et envoie des notifications par e-mail lorsque de telles annonces sont trouvées.
 
-## Configuration
-Avant d'utiliser le bot, vous devez configurer certains paramètres :
+## Fonctionnalités principales :
+Surveillance Automatisée : Le bot scrute périodiquement les nouvelles annonces sur Vinted en fonction des critères définis.
+Notification par E-mail : Lorsqu'une nouvelle annonce est détectée, le bot envoie une notification par e-mail avec des détails sur l'annonce.
+Critères de Recherche Personnalisables : Les critères de recherche tels que le produit recherché, le prix maximum et la taille sont facilement ajustables.
+Intégration avec SendGrid : Les notifications par e-mail sont envoyées via l'API SendGrid.
 
-Critères de recherche : Définissez les critères de recherche en modifiant les variables telles que RECHERCHE, MAX_PRIX, etc. dans le code Python.
+## Prérequis :
+Avant d'exécuter le script, assurez-vous d'avoir les éléments suivants installés :
 
-Adresse e-mail : Configurez l'adresse e-mail de l'utilisateur dans la variable TO_EMAIL pour recevoir les notifications.
+Python (version 3.x)
+Selenium (pip install selenium)
+SendGrid (pip install sendgrid)
+Navigateur Web compatible avec Selenium (par exemple, Google Chrome)
+Navigateur Web compatible avec Selenium (par exemple, Google Chrome)
+Webdriver Chrome (Téléchargeable depuis https://sites.google.com/a/chromium.org/chromedriver/downloads et doit être placé dans le PATH ou dans le même répertoire que le script)
 
-Compte SendGrid (facultatif) : Si vous utilisez SendGrid pour envoyer des e-mails, configurez votre API SendGrid dans le code Python.
+## Configuration :
+Avant de lancer le script, vous devez effectuer les configurations suivantes dans le fichier Python :
 
-Navigateur Web : Assurez-vous d'avoir le navigateur Chrome installé sur votre système, ainsi que le pilote Chrome WebDriver approprié.
+Définissez les variables RECHERCHE, MAX_PRIX, MAX_SIZE_ELEMENT, TO_EMAIL et SENDER_MAIL selon vos préférences.
+Assurez-vous que la variable URL est correctement configurée pour la recherche sur Vinted.
 
-## Installation
-Cloner ce dépôt sur votre machine locale.
+## Utilisation :
+Exécutez le script Python en utilisant la commande python nom_du_script.py.
+Le script commencera à surveiller les nouvelles annonces sur Vinted.
+Lorsqu'une nouvelle annonce correspondant aux critères est trouvée, une notification par e-mail sera envoyée à l'adresse spécifiée.
 
-Assurez-vous d'avoir Python installé sur votre système.
-
-Installez les dépendances requises en exécutant pip install -r requirements.txt.
-
-Configurez les paramètres nécessaires dans le fichier Python.
-
-Exécutez le fichier Python avec python bot_vinted.py.
-
-## Exigences
-Python 3.x
-Selenium
-SendGrid (facultatif)
-Navigateur Chrome et pilote Chrome WebDriver
-Limitations
-Le bot peut ne pas être efficace si le site Vinted met en place des mesures de protection contre les bots, comme des CAPTCHA ou des restrictions de débit.
-Les modifications ultérieures du site Vinted peuvent nécessiter des ajustements dans le code pour maintenir le bon fonctionnement du bot.
-Contribution
-Les contributions sont les bienvenues ! Si vous trouvez des bugs ou si vous souhaitez ajouter de nouvelles fonctionnalités, n'hésitez pas à ouvrir une issue ou à proposer une pull request.
-
-## Avertissement
-Ce projet a été réalisé à des fins éducatives et de démonstration uniquement. L'utilisation de ce bot pour collecter des données à grande échelle ou pour tout autre but contraire aux conditions d'utilisation de Vinted est strictement interdite. Utilisez-le à vos propres risques.
+## Améliorations Possibles :
+Ajouter la prise en charge d'autres méthodes de notification, telles que les notifications push sur mobile.
+Permettre une configuration plus avancée des critères de recherche, par exemple en ajoutant des filtres supplémentaires.
+Implémenter une interface utilisateur pour faciliter la configuration et la surveillance des annonces.
+Assurez-vous de bien comprendre le code et les configurations avant de l'exécuter. Si vous avez des questions ou des suggestions d'amélioration, n'hésitez pas à les mentionner dans les commentaires du script ou à les ajouter à ce README.
