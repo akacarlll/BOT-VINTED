@@ -29,19 +29,19 @@ Send_Mail : Envoie un email au propriétaire du bot avec les informations des X 
 Test : Cette partie permet d'exécuter automatiquement et en continu le bot en concaténant toutes les fonctions dans une boucle while.
 
 ## Prérequis : 
-Python (version 3.x)
-Selenium (pip install selenium)
-BeautifulSoup (pip install bs4)
-Pandas (pip install pandas)
-Urllib
-EmailMessage
-Un compte Vinted
+Python (version 3.x)  
+Selenium (pip install selenium)  
+BeautifulSoup (pip install bs4)  
+Pandas (pip install pandas)  
+Urllib  
+EmailMessage  
+Un compte Vinted  
 
 ## Utilisation :
-Installez les modules Selenium et BeautifulSoup.
-Navigateur Web compatible avec Selenium (par exemple, Google Chrome)
-Modifiez les paramètres de recherche dans la fonction Get_Link.
-Lancez le script Python.
+Installez les modules Selenium et BeautifulSoup.  
+Navigateur Web compatible avec Selenium (par exemple, Google Chrome)  
+Modifiez les paramètres de recherche dans la fonction Get_Link.  
+Lancez le script Python.  
 
 ## Remarques :
 Le nombre de pages à scraper est limité par Vinted.
@@ -54,11 +54,11 @@ Ce projet n'est distribué sous aucune licence, servez-vous mes amis !!
 N'hésitez pas à me contacter si vous avez des questions ou des suggestions.
 
 ## Améliorations Possibles :
-Ajouter la prise en charge d'autres méthodes de notification, telles que les notifications push sur mobile.
-Améliorer la qualité du choix des produits envoyés.
-Pouvoir envoyer les photos.
-Pouvoir directement envoyer un message aux vendeurs, négocier le prix via l'implémentation d'un LLM (API de ChatGPT 4 par exemple)
-Implémenter une interface utilisateur pour faciliter la configuration et la surveillance des annonces.
+Ajouter la prise en charge d'autres méthodes de notification, telles que les notifications push sur mobile.  
+Améliorer la qualité du choix des produits envoyés.  
+Pouvoir envoyer les photos.  
+Pouvoir directement envoyer un message aux vendeurs, négocier le prix via l'implémentation d'un LLM (API de ChatGPT 4 par exemple)  
+Implémenter une interface utilisateur pour faciliter la configuration et la surveillance des annonces.  
 Amélioration de la qualité et lisibilité du code.
 
 
