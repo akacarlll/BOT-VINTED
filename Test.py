@@ -1,8 +1,8 @@
 from BOT import main
-from yikes import final_df, get_page2
+from FinalDB import final_df, get_page2
 from Get_Last import get_dernier, lastlast
 from Mail import main2
-from BOT import main
+from OUR_VINTED_BOT import main
 import time
 
 import pandas as pd
