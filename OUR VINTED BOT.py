@@ -1,11 +1,8 @@
-import os
+
 import requests
 from bs4 import BeautifulSoup
 import time
-import datetime
 import random
-import json
-import re
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver import Keys, ActionChains
@@ -13,34 +10,30 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import numpy as np
 import pandas as pd
-import urllib
-import json
-import smtplib
 
 
 
 
-
-#global driver = webdriver.Chrome(service=service, options = options)
-#global PATH
 options = webdriver.ChromeOptions()
 options.add_argument('--ignore-certificate-errors')
 options.add_argument('--ignore-ssl-errors')
+
 #Lance en arrière plan si True
 options.headless = True
+
 #Modifie la taille de la fenêtre
 options.add_argument("window-size=1200x600")
+
 #Chemin à suivre pour trouver le programme Chrome_Driver
-#PATH = "C:\\Users\\carlf\\OneDrive\\Bureau\\Technique de programmation\\BOT VINTED\\Chrome_Driver V114.05.5735.16\\chromedriver.exe"
+
 PATH = "C:\\Users\\carlf\\OneDrive\\Bureau\\Technique de programmation\\BOT VINTED\\chromedriver_win32\\chromedriver.exe"
 service = Service(executable_path=PATH)
 driver = webdriver.Chrome(service=service, options = options)
-#global driver
 
 
 
+#Classe qui permet de colorer les sorties du code
 class Spy():
     gris = "\033[1;30;1m"
     rouge = "\033[1;31;1m"
@@ -51,9 +44,7 @@ class Spy():
     cyan = "\033[1;36;1m"
     blanc = "\033[1;0;1m"
 
-url ="https://www.vinted.fr/items/4101780136-veste-carhartt-active-jacket-noir-boxy-rework?referrer=catalog"
-#url = "https://www.vinted.fr/items/4074634564-pantalon-noir?referrer=catalog"
-#url = "https://www.vinted.fr/items/1870592471-louis-vuitton?referrer=catalog"
+
 user_agent = {'User-Agent':"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"}
 
 global dict_order, dict_catalog, dict_size, dict_color, dict_brand, dict_condition
@@ -169,7 +160,7 @@ def interactive_version():
                                            condition=condition_str)
     return criteria_string
 
-#criteria_string = interactive_version()
+
 
 def get_page(criteria_string, query, count=1):
     pages = []
@@ -222,7 +213,7 @@ def main():
     print(data)
     # Enregistrer la DataFrame dans un fichier CSV
     data.to_csv("vinted_data.csv", index=False)
-main()
+
 
 
 
