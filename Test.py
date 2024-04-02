@@ -6,10 +6,7 @@ from BOT import main
 import time
 
 import pandas as pd
-Time = 100000
-df = pd.read_csv("C:\\Users\\carlf\\OneDrive\\Bureau\\Technique de programmation\\BOT VINTED\\vinted_data.csv")
-df_last = pd.read_csv("C:\\Users\\carlf\\OneDrive\\Bureau\\Technique de programmation\\BOT VINTED\\final_data.csv")
-
+Time = 6000
 
 def Bottt():
     last_seen_title = None
