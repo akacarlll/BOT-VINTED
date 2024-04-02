@@ -5,9 +5,9 @@
 Ce projet vise à simplifier les recherches fastidieuses sur Vinted en automatisant la quête d'articles correspondant à vos critères spécifiques. Il vous envoie ensuite les informations pertinentes par email.  
 
 
-Nota Bene : Nous avons créée deux Bots distincts le premier se trouve dans la branche main, quant au second il est dans l'autre branche. Cela nous a permis d'utiliser différemment les packages, et d'en utiliser d'autres aussi.
 
 </div>
+Nota Bene : Nous avons créée deux Bots distincts le premier se trouve dans la branche main, quant au second il est dans la branche feature. Cela nous a permis d'utiliser différemment les packages, et d'en utiliser d'autres aussi.
 
 ## Fonctionnement:
 Définissez vos préférences : Précisez le nom, la marque, la taille, la couleur et d'autres caractéristiques de l'article recherché. Vous avez également la possibilité de définir le nombre de pages Vinted à explorer.
